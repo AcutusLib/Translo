@@ -121,7 +121,7 @@
     "@tailwindcss/line-clamp": "0.4.4",
     "@tailwindcss/typography": "0.5.15",
     "@types/crypto-js": "4.2.2",
-    "@types/lodash": "4.17.13",
+    "@types/lodash": "4.17.14",
     "@types/node": "22.9.1",
     "@types/nodemailer": "6.4.16",
     "@types/react": "npm:types-react@19.0.0-rc.1",
