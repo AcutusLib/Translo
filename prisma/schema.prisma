@@ -100,6 +100,7 @@ model Keyword {
   Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String
   context   String
+  rephrase  Boolean @default(false)
 
   translations Translation[]
 

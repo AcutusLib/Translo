@@ -33,6 +33,7 @@ const getAllKeywordsByProject = async (projectId: string) => {
       projectId: true,
       context: true,
       translations: true,
+      rephrase: true,
     },
     where: {
       projectId: projectId,

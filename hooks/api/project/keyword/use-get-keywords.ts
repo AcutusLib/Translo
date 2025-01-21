@@ -13,6 +13,7 @@ type GetKeywordsResponseType = {
   id: string
   projectId: string
   context: string
+  rephrase: boolean
   translations: {
     id: string
     keywordId: string

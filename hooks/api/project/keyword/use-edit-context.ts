@@ -9,7 +9,8 @@ import { getKeywordsQueryKey } from "./use-get-keywords"
 const editContext = async (
   projectId: string,
   keywordId: string,
-  context: string
+  context: string,
+  rephrase: boolean
 ) => {
   const result = await axios({
     url: `/api/projects/${projectId}/keywords/${keywordId}/context`,
@@ -19,6 +20,7 @@ const editContext = async (
     },
     data: {
       context,
+      rephrase,
     },
   })
   return result.data
@@ -28,12 +30,14 @@ type EditContextApi = ApiResponseType & {
   projectId: string
   keywordId: string
   context: string
+  rephrase: boolean
 }
 
 export const useEditContext = ({
   projectId,
   keywordId,
   context,
+  rephrase,
   onSuccess,
   showAlertType,
 }: EditContextApi) => {
@@ -41,7 +45,8 @@ export const useEditContext = ({
 
   return useMutation({
     mutationKey: ["editContext", projectId],
-    mutationFn: async () => await editContext(projectId, keywordId, context),
+    mutationFn: async () =>
+      await editContext(projectId, keywordId, context, rephrase),
     onError: (error) => handleApiError(error, showAlertType),
     onSuccess: (data) => {
       onSuccess?.(data)

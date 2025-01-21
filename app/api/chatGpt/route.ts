@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server"
-import { OpenAIHelper } from "@/utils/OpenAiUtils"
+import { generatePromptTranslation, OpenAIHelper } from "@/utils/OpenAiUtils"
 import { getServerSession } from "next-auth/next"
 import * as z from "zod"
 
@@ -115,39 +115,15 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-      const prompt = `
-I'm working on internationalizing my application. I'd like to translate the text "${sentence}"${
-        keywordDB.context
-          ? `, used in this context: "${keywordDB.context}"`
-          : ""
-      }. Could you write the translations in [${languagesPropt}]?
-      ${
-        settings.formality ? `Translations should be ${settings.formality}` : ""
-      }
-      ${
-        settings.description
-          ? `The project description is: ${settings.description}. `
-          : ""
-      }
-      ${
-        settings.audience?.length
-          ? `The target audience is: ${settings.audience?.join(", ")}.`
-          : ""
-      }
-      ${agePrompt ? agePrompt : ""}
-
-      Be aware that in some languages there are articles where English does not have them.
-
-respond using an unique JSON object without any comments or any other descriptions, like so:
-{
-  ${project.languages.map((lang) => `"${lang.short}": ""`).join(", ")}
-}
-
-where:
-${project.languages.map(
-  (lang) => `language-id for ${lang.name} = ${lang.short}`
-)}
-`
+      const prompt = generatePromptTranslation({
+        translationEn: sentence,
+        context: keywordDB.context,
+        languagesPropt: languagesPropt,
+        settings,
+        agePrompt,
+        languages: project.languages,
+        rephrase: keywordDB.rephrase,
+      })
 
       const openaiHelper = new OpenAIHelper()
       const chatGptResponse = await openaiHelper.askChatGPT({
@@ -161,13 +137,16 @@ ${project.languages.map(
       }>(jsonString)
       if (result) {
         const response = JSON.stringify(
-          Object.keys(result).reduce((acc, key) => {
-            acc[key] =
-              typeof result[key] === "object"
-                ? JSON.stringify(result[key])
-                : result[key]
-            return acc
-          }, {})
+          Object.keys(result).reduce(
+            (acc, key) => {
+              acc[key] =
+                typeof result[key] === "object"
+                  ? JSON.stringify(result[key])
+                  : result[key]
+              return acc
+            },
+            { chatGptPrompt: prompt }
+          )
         )
 
         // in case we fail to use the real usage statistics we fallback to the length of the prompt and response

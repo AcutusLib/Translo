@@ -51,6 +51,7 @@ const DetailSlideOver = (props: Props) => {
 
   const alertContext = useContext(AlertContext)
   const [key, setKey] = useState(keyword.keyword)
+  const [rephrase, setRephrase] = useState(keyword.rephrase)
 
   const [translations, setTranslations] = useState<
     (TranslationsProps & {
@@ -147,6 +148,7 @@ const DetailSlideOver = (props: Props) => {
     projectId: projectId,
     keywordId: keyword.id,
     context,
+    rephrase,
     showAlertType: alertContext.showAlert,
     onSuccess: () => {
       setShouldSave(false)
@@ -266,6 +268,10 @@ const DetailSlideOver = (props: Props) => {
       setTranslations(newTranslations)
       setHints(hints)
       setShouldSave(true)
+      // eslint-disable-next-line no-console
+      console.log("==== prompt: ====")
+      // eslint-disable-next-line no-console
+      console.log(response.chatGptPrompt)
     },
     showAlertType: alertContext.showAlert,
   })
@@ -287,7 +293,7 @@ const DetailSlideOver = (props: Props) => {
         }}
       >
         <div className="relative p-4 flex-1 sm:px-6">
-          <SlideOverRow title="Keyword">
+          <SlideOverRow title={i18n.t("Keyword")}>
             <div className="mt-1">
               <label className="inline-block text-xs font-light text-gray-700 mt-2.5 dark:text-gray-200">
                 {i18n.t(
@@ -321,7 +327,7 @@ const DetailSlideOver = (props: Props) => {
               </div>
             </div>
           </SlideOverRow>
-          <SlideOverRow title="Context">
+          <SlideOverRow title={i18n.t("Context")}>
             <label className="inline-block text-xs font-light text-gray-700 mt-2.5 dark:text-gray-200">
               {i18n.t(
                 "It's necessary if you need to specify a context to the AI in order to make a more accurate translation"
@@ -339,6 +345,22 @@ const DetailSlideOver = (props: Props) => {
                 onChange={handleChangeContext}
               ></textarea>
             </div>
+          </SlideOverRow>
+          <SlideOverRow title={i18n.t("Rephrase")}>
+            <label className="hover:cursor-pointer flex py-2 px-1 w-full -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
+              <input
+                type="checkbox"
+                className="hover:cursor-pointer shrink-0 mt-0.5 border-gray-300 rounded-full text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-500 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                checked={rephrase}
+                onChange={(event) => {
+                  setRephrase(event.target.checked)
+                  setShouldSave(true)
+                }}
+              />
+              <span className="text-sm text-gray-500 ms-3 dark:text-gray-400">
+                {i18n.t("Rephrase the sentence so that it translates better")}
+              </span>
+            </label>
           </SlideOverRow>
         </div>
         <div className="relative p-4 flex-1 sm:px-6">

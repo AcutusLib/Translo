@@ -11,6 +11,7 @@ import { routeContextSchemaProjectKeyword } from "../utils"
 
 const keywordPatchSchema = z.object({
   context: z.string(),
+  rephrase: z.boolean().optional(),
 })
 
 export async function PATCH(
@@ -36,6 +37,7 @@ export async function PATCH(
       },
       data: {
         context: body.context,
+        rephrase: body.rephrase,
       },
     })
 

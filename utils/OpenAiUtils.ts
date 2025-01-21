@@ -11,6 +11,7 @@ export type GeneratePromptTranslationParams = {
   settings: ProjectSettings
   agePrompt: string
   languages: LanguageData[]
+  rephrase: boolean
 }
 
 export const generatePromptTranslation = ({
@@ -20,28 +21,38 @@ export const generatePromptTranslation = ({
   settings,
   agePrompt,
   languages,
-}: GeneratePromptTranslationParams) => `
-I'm working on internationalizing my application. I'd like to translate the text "${translationEn}"${
+  rephrase,
+}: GeneratePromptTranslationParams) => `I'm working on internationalizing my application.\nI'd like to translate the text "${translationEn}"${
   context ? `, used in this context: "${context}"` : ""
-}. Could you write the translations in [${languagesPropt}]?
-      ${
-        settings.formality
-          ? `Translations should be ${settings.formality}. `
-          : ""
-      }
-      ${
-        settings.description
-          ? `The project description is: ${settings.description}. `
-          : ""
-      }
-      ${
-        settings.audience?.length
-          ? `The target audience is: ${settings.audience.join(", ")}.`
-          : ""
-      }
-      ${agePrompt ? agePrompt : ""}
-
-      Be aware that in some languages there are articles where English does not have them.
+}. 
+Could you write the translations in [${languagesPropt}]? 
+${
+  settings.formality
+    ? `
+Translations should be ${settings.formality}. `
+    : ""
+}${
+  settings.description
+    ? `
+The project description is: ${settings.description}. `
+    : ""
+}${
+  settings.audience?.length
+    ? `
+The target audience is: ${settings.audience.join(", ")}.`
+    : ""
+}${
+  agePrompt
+    ? `
+${agePrompt}`
+    : ""
+}${
+  rephrase
+    ? `
+Rephrase the sentence so that it translates better.`
+    : ""
+} 
+If the text contains HTML tags or code, return the entire complete structure.
 
 respond using an unique JSON object without any comments or any other descriptions, like so:
 {

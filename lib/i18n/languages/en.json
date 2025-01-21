@@ -156,6 +156,8 @@
   "project.Import keywords.description": "Upload a .json file or paste the JSON into the designated field to add new keywords or to modify existing ones massively. We will guide you through the process. If there are keywords that already exist in the project, we will prompt you to select which ones you truly want to replace",
   "Projects": "Projects",
   "Recharge tokens": "Recharge tokens",
+  "Rephrase": "Rephrase",
+  "Rephrase the sentence so that it translates better": "Rephrase the sentence so that it translates better",
   "Reset your password": "Reset your password",
   "Save": "Save",
   "Saved": "Saved",

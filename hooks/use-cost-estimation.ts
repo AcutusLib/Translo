@@ -23,6 +23,7 @@ export function useCostEstimation(props: Props) {
     return sentences.reduce((acc, sentence) => {
       const request = generatePromptTranslation({
         context,
+        rephrase: false,
         translationEn: sentence,
         languagesPropt: new Array(numberOfLanguages).fill("en, ").join(""),
         settings: {
