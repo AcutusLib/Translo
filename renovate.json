@@ -85,16 +85,14 @@
       "automerge": true
     },
     {
-      "matchPackageNames": ["@types/react", "react"],
+      "matchPackageNames": [
+        "@types/react",
+        "react",
+        "@types/react-dom",
+        "react-dom"
+      ],
       "groupName": "Dependecies 'react' with types",
       "groupSlug": "dependencies-react-with-types",
-      "enabled": true,
-      "automerge": false
-    },
-    {
-      "matchPackageNames": ["@types/react-dom", "react-dom"],
-      "groupName": "Dependecies 'react-dom' with types",
-      "groupSlug": "dependencies-react-dom-with-types",
       "enabled": true,
       "automerge": false
     }
