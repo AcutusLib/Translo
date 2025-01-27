@@ -17,11 +17,13 @@ export async function POST(req: Request) {
   try {
     const json = await req.json()
     const body = emailVerificationSchema.parse(json)
-
     const users = await db.user.findMany({
       where: {
         email: {
           contains: body.email,
+        },
+        emailVerificationToken: {
+          contains: body.token,
         },
       },
     })

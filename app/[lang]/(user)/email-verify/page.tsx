@@ -29,13 +29,24 @@ export default function VerifyEmail() {
         })
       }
 
-      await HTTP_POST(
-        HTTP_POST_PATH.emailVerification,
-        JSON.stringify({
-          email,
-          token,
+      try {
+        await HTTP_POST(
+          HTTP_POST_PATH.emailVerification,
+          JSON.stringify({
+            email,
+            token,
+          })
+        )
+      } catch (error) {
+        setResult("Error verifying your email")
+        return toast({
+          title: i18n.t("Something went wrong"),
+          description: i18n.t(
+            "Your email verification failed. Please try again"
+          ),
+          variant: "destructive",
         })
-      )
+      }
 
       toast({
         title: i18n.t("Good news"),
